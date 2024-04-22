@@ -1,0 +1,14 @@
+{
+    "BoxEsp": true,
+    "BoxColor": "blue",
+    "BoxEnemyColor": "red",
+    "BackgroundBox": "black",
+    "DrawHealthBar": true,
+    "LineEsp": true,
+    "LineColor": "white",
+    "HeadEsp": true,
+    "HeadColor": "white",
+    "triggerbot": true,
+    "ignoreTeam": true,
+    "TeamEsp": false
+}
