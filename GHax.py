@@ -29,24 +29,22 @@ class ConfigEditor:
         self.inputs = {}
 
         for i, (key, value) in enumerate(self.config.items()):
+            label = ttk.Label(self.master, text=key)
+            label.grid(row=i, column=0, sticky="w")
+
             if isinstance(value, bool):
-                var = tk.BooleanVar(value=self.config[key])
+                var = tk.BooleanVar(value=value)
                 checkbox = ttk.Checkbutton(self.master, text=key, variable=var, command=lambda key=key: self.update_config(key))
-                checkbox.grid(row=i, column=0, sticky="w")
+                checkbox.grid(row=i, column=1, sticky="w")
                 self.checkboxes[key] = var
             elif key == "triggerKey":  # Dropdown for trigger key
-                label = ttk.Label(self.master, text=key)
-                label.grid(row=i, column=0, sticky="w")
                 dropdown_var = tk.StringVar(value=value)
                 dropdown = ttk.Combobox(self.master, textvariable=dropdown_var, values=["shift", "ctrl", "alt", "spacebar"], state="readonly")
                 dropdown.grid(row=i, column=1, sticky="we")
                 dropdown.bind("<<ComboboxSelected>>", lambda event, key=key, var=dropdown_var: self.update_config_dropdown(key, var))
                 self.inputs[key] = dropdown_var
             else:
-                label = ttk.Label(self.master, text=key)
-                label.grid(row=i, column=0, sticky="w")
-                entry_var = tk.StringVar()
-                entry_var.set(str(value))
+                entry_var = tk.StringVar(value=str(value))
                 entry = ttk.Entry(self.master, textvariable=entry_var)
                 entry.grid(row=i, column=1, sticky="we")
                 entry.bind("<Return>", lambda event, key=key: self.update_config(key))
@@ -306,9 +304,12 @@ class Program:
             playerTeam = pw_module.r_int(self.process, player + Offsets.m_iTeamNum)
 
             if entityHp > 0 and (self.triggerbot_on_same_team or entityTeam != playerTeam):  # Check if triggerbot should fire based on the new setting
-                time.sleep(uniform(0.01, 0.05))
+                delay = 0.01  # Set a fixed delay (adjust as needed)
+                time.sleep(delay)
                 mouse = Controller()
                 mouse.click(Button.left)
+
+
 
 def main():
     root = tk.Tk()
