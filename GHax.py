@@ -3,21 +3,25 @@ from tkinter import ttk
 from json import load, dump
 import asyncio
 import os
-from importlib import import_module
 import multiprocessing
+import keyboard
+import time
+from pynput.mouse import Controller, Button
+from win32gui import GetWindowText, GetForegroundWindow
 from random import uniform
 
 # Dynamic imports
-pw_module = import_module('py' + 'Meow')
-pymem = import_module('py' + 'mem')
-pynput = import_module('pyn' + 'put')
-pyautogui = import_module('pyau' + 'togui')
-requests = import_module('re' + 'quests')
+pw_module = __import__('py' + 'Meow')
+pymem = __import__('py' + 'mem')
+pyautogui = __import__('pyau' + 'togui')
+requests = __import__('re' + 'quests')
+from fernet import Fernet
 
 class ConfigEditor:
-    def __init__(self, master, config):
+    def __init__(self, master, config, program):
         self.master = master
         self.config = config
+        self.program = program
         self.create_widgets()
 
     def create_widgets(self):
@@ -27,28 +31,41 @@ class ConfigEditor:
         for i, (key, value) in enumerate(self.config.items()):
             if isinstance(value, bool):
                 var = tk.BooleanVar(value=self.config[key])
-                checkbox = ttk.Checkbutton(self.master, text=key, variable=var)
+                checkbox = ttk.Checkbutton(self.master, text=key, variable=var, command=lambda key=key: self.update_config(key))
                 checkbox.grid(row=i, column=0, sticky="w")
                 self.checkboxes[key] = var
+            elif key == "triggerKey":  # Dropdown for trigger key
+                label = ttk.Label(self.master, text=key)
+                label.grid(row=i, column=0, sticky="w")
+                dropdown_var = tk.StringVar(value=value)
+                dropdown = ttk.Combobox(self.master, textvariable=dropdown_var, values=["shift", "ctrl", "alt", "spacebar"], state="readonly")
+                dropdown.grid(row=i, column=1, sticky="we")
+                dropdown.bind("<<ComboboxSelected>>", lambda event, key=key, var=dropdown_var: self.update_config_dropdown(key, var))
+                self.inputs[key] = dropdown_var
             else:
                 label = ttk.Label(self.master, text=key)
                 label.grid(row=i, column=0, sticky="w")
                 entry_var = tk.StringVar()
-                entry_var.set(value)
+                entry_var.set(str(value))
                 entry = ttk.Entry(self.master, textvariable=entry_var)
                 entry.grid(row=i, column=1, sticky="we")
+                entry.bind("<Return>", lambda event, key=key: self.update_config(key))
                 self.inputs[key] = entry_var
 
         apply_button = ttk.Button(self.master, text="Apply", command=self.apply_changes)
         apply_button.grid(row=len(self.config), columnspan=2, sticky="we")
 
+    def update_config(self, key):
+        if key in self.checkboxes:
+            self.config[key] = self.checkboxes[key].get()
+        elif key in self.inputs:
+            self.config[key] = self.inputs[key].get()
+
+    def update_config_dropdown(self, key, dropdown_var):
+        self.config[key] = dropdown_var.get()
+
     def apply_changes(self):
-        for key, var in self.checkboxes.items():
-            self.config[key] = var.get()
-
-        for key, var in self.inputs.items():
-            self.config[key] = var.get()
-
+        self.program.apply_config(self.config)
         with open("config.json", "w") as f:
             dump(self.config, f, indent=4)
 
@@ -60,7 +77,6 @@ class Offsets:
         dwEntityList = offset["client.dll"]["dwEntityList"]
         dwViewMatrix = offset["client.dll"]["dwViewMatrix"]
         dwLocalPlayerPawn = offset["client.dll"]["dwLocalPlayerPawn"]
-        dwLocalPlayerController = offset["client.dll"]["dwLocalPlayerController"]
         m_iszPlayerName = client["client.dll"]["classes"]["CBasePlayerController"]["fields"]["m_iszPlayerName"]
         m_iHealth = client["client.dll"]["classes"]["C_BaseEntity"]["fields"]["m_iHealth"]
         m_iTeamNum = client["client.dll"]["classes"]["C_BaseEntity"]["fields"]["m_iTeamNum"]
@@ -119,7 +135,7 @@ class WallHack:
 
     def GetEntities(self):
         entityList = pw_module.r_int64(self.process, self.module + Offsets.dwEntityList)
-        localPlayer = pw_module.r_int64(self.process, self.module + Offsets.dwLocalPlayerController)
+        localPlayer = pw_module.r_int64(self.process, self.module + Offsets.dwLocalPlayerPawn)
         localPlayerTeam = pw_module.r_int(self.process, localPlayer + Offsets.m_iTeamNum)
 
         for _ in range(1, 65):
@@ -196,56 +212,14 @@ class WallHack:
 
         pw_module.end_drawing()
 
-class TriggerBot:
-    def __init__(self, ignoreTeam=False):
-        self.ignoreTeam = ignoreTeam
-        self.mouse = pynput.mouse.Controller()
-        self.pm = pymem.Pymem("cs2.exe")
-        self.client = pymem.process.module_from_name(self.pm.process_handle, "client.dll").lpBaseOfDll
-        self.trigger_enabled = False  # Initialize triggerbot state
-        self.key_pressed = False
-
-    async def EnableAsync(self):
-        player = self.pm.read_longlong(self.client + Offsets.dwLocalPlayerPawn)
-        entityId = self.pm.read_int(player + Offsets.m_iIDEntIndex)
-
-        if entityId > 0:
-            entList = self.pm.read_longlong(self.client + Offsets.dwEntityList)
-            entEntry = self.pm.read_longlong(entList + 0x8 * (entityId >> 9) + 0x10)
-            entity = self.pm.read_longlong(entEntry + 120 * (entityId & 0x1FF))
-            entityTeam = self.pm.read_int(entity + Offsets.m_iTeamNum)
-            playerTeam = self.pm.read_int(player + Offsets.m_iTeamNum)
-            entityHp = self.pm.read_int(entity + Offsets.m_iHealth)
-
-            if self.ignoreTeam or (entityTeam != playerTeam) and entityHp > 0:
-                await self.ShootAsync()
-
-    async def ShootAsync(self):
-        await asyncio.sleep(uniform(0.01, 0.03))
-        self.mouse.press(pynput.mouse.Button.left)
-        await asyncio.sleep(uniform(0.01, 0.05))
-        self.mouse.release(pynput.mouse.Button.left)
-        await asyncio.sleep(0.1)
-
-    def on_press(self, key):
-        if key == pynput.keyboard.Key.alt_l:
-            self.key_pressed = True
-            self.trigger_enabled = True
-
-    def on_release(self, key):
-        if key == pynput.keyboard.Key.alt_l:
-            self.key_pressed = False
-            self.trigger_enabled = False
-
 class Program:
     def __init__(self):
         try:
             self.window = "Counter-Strike 2"
             self.fps = 144
-            self.config = self.LoadConfig()
+            self.config = self.load_config()
             self.process = pw_module.open_process("cs2.exe")
             self.module = pw_module.get_module(self.process, "client.dll")["base"]
-            self.trigger = TriggerBot(ignoreTeam=self.config["ignoreTeam"])
             self.wall = WallHack(
                 self.process, 
                 self.module, 
@@ -260,49 +234,81 @@ class Program:
                 headColor=self.config["HeadColor"],
                 backgroundColor=self.config["BackgroundBox"]
             )  # Initialize WallHack with TeamEsp option
+
+            # Triggerbot config
+            self.triggerbot_enabled = self.config.get("Triggerbot", False)
+            self.trigger_key = self.config.get("triggerKey", "shift")
+            self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)  # New triggerbot setting
         except:
             exit("Error: Enable only after opening Counter Strike 2")
 
-    def LoadConfig(self):
+    def load_config(self):
         try:
             with open("config.json", "r", encoding="utf-8") as file:
                 return load(file)
         except:
             exit("Error when importing configuration, see if the config.json file exists")
 
-    async def Run(self):
+    def apply_config(self, new_config):
+        self.config = new_config
+        self.wall.teamEsp = self.config["TeamEsp"]
+        self.wall.drawHealthBar = self.config["DrawHealthBar"]
+        self.wall.lineEsp = self.config["LineEsp"]
+        self.wall.headEsp = self.config["HeadEsp"]
+        self.wall.boxEsp = self.config["BoxEsp"]
+        self.wall.boxColor = self.config["BoxColor"]
+        self.wall.boxEnemyColor = self.config["BoxEnemyColor"]
+        self.wall.lineColor = self.config["LineColor"]
+        self.wall.headColor = self.config["HeadColor"]
+        self.wall.backgroundColor = self.config["BackgroundBox"]
+
+        # Update triggerbot settings
+        self.triggerbot_enabled = self.config.get("Triggerbot", False)
+        self.trigger_key = self.config.get("triggerKey", "shift")
+        self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)  # New triggerbot setting
+
+    async def run(self):
         pw_module.overlay_init(target=self.window, title=self.window, fps=self.fps)
-        
-        # Create a listener for left Alt key press and release
-        listener = pynput.keyboard.Listener(on_press=self.trigger.on_press, on_release=self.trigger.on_release)
-        listener.start()
 
         while pw_module.overlay_loop():
             try:
-                self.config = self.LoadConfig()  # Reload config each frame in case it's changed
-                self.wall.teamEsp = self.config["TeamEsp"]
-                self.wall.drawHealthBar = self.config["DrawHealthBar"]
-                self.wall.lineEsp = self.config["LineEsp"]
-                self.wall.headEsp = self.config["HeadEsp"]
-                self.wall.boxEsp = self.config["BoxEsp"]
-                self.wall.boxColor = self.config["BoxColor"]
-                self.wall.boxEnemyColor = self.config["BoxEnemyColor"]
-                self.wall.lineColor = self.config["LineColor"]
-                self.wall.headColor = self.config["HeadColor"]
-                self.wall.backgroundColor = self.config["BackgroundBox"]
+                self.config = self.load_config()  # Reload config each frame in case it's changed
+                self.apply_config(self.config)
 
                 if self.config["BoxEsp"] or self.config["LineEsp"] or self.config["HeadEsp"] or self.config["DrawHealthBar"]:
                     self.wall.Render()
-
-                if self.config["triggerbot"] and self.trigger.key_pressed:
-                    await self.trigger.EnableAsync()
 
                 # Drawing watermarks
                 pw_module.draw_text("GHax", 10, 10, 14, pw_module.get_color("white"))  # Draw "GHax" at (10, 10) with font size 14 and white color
                 pw_module.draw_text("Made by Cr0mb", 10, 30, 14, pw_module.get_color("white"))  # Draw "Made by Cr0mb" at (10, 30) with font size 14 and white color
                 pw_module.draw_text("Discord: cr0mbleonthegame", 10, 50, 14, pw_module.get_color("white"))  # Draw "Discord: cr0mbleonthegame" at (10, 50) with font size 14 and white color
+
+                # Triggerbot logic
+                if self.triggerbot_enabled and GetWindowText(GetForegroundWindow()) == "Counter-Strike 2" and keyboard.is_pressed(self.trigger_key):
+                    self.triggerbot()
+
             except:
                 pass
+
+    def triggerbot(self):
+        player = pw_module.r_int64(self.process, self.module + Offsets.dwLocalPlayerPawn)
+        entityId = pw_module.r_int(self.process, player + Offsets.m_iIDEntIndex)
+
+        if entityId > 0:
+            entList = pw_module.r_int64(self.process, self.module + Offsets.dwEntityList)
+
+            entEntry = pw_module.r_int64(self.process, entList + 0x8 * (entityId >> 9) + 0x10)
+            entity = pw_module.r_int64(self.process, entEntry + 120 * (entityId & 0x1FF))
+
+            entityTeam = pw_module.r_int(self.process, entity + Offsets.m_iTeamNum)
+            entityHp = pw_module.r_int(self.process, entity + Offsets.m_iHealth)
+
+            playerTeam = pw_module.r_int(self.process, player + Offsets.m_iTeamNum)
+
+            if entityHp > 0 and (self.triggerbot_on_same_team or entityTeam != playerTeam):  # Check if triggerbot should fire based on the new setting
+                time.sleep(uniform(0.01, 0.05))
+                mouse = Controller()
+                mouse.click(Button.left)
 
 def main():
     root = tk.Tk()
@@ -321,14 +327,16 @@ def main():
             "LineColor": "white",
             "HeadEsp": False,
             "HeadColor": "purple",
-            "triggerbot": True,
-            "ignoreTeam": True,
-            "TeamEsp": True
+            "TeamEsp": True,
+            "Triggerbot": False,
+            "triggerKey": "shift",
+            "triggerbotOnSameTeam": False  # New setting added to config.json
         }
-    editor = ConfigEditor(root, config)
+    program = Program()
+    editor = ConfigEditor(root, config, program)
     root.mainloop()
 
 if __name__ == "__main__":
     multiprocessing.Process(target=main).start()
     program = Program()
-    asyncio.run(program.Run())
+    asyncio.run(program.run())
