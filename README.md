@@ -17,7 +17,7 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
     HeadColor
     TeamEsp
     Triggerbot
-	triggerbotOnSameTeam
+    triggerbotOnSameTeam
     triggerKey
 ```
 ## Usage
