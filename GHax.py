@@ -37,6 +37,7 @@ class ConfigEditor:
                 checkbox = ttk.Checkbutton(self.master, text=key, variable=var, command=lambda key=key: self.update_config(key))
                 checkbox.grid(row=i, column=1, sticky="w")
                 self.checkboxes[key] = var
+                checkbox.bind("<ButtonRelease-1>", lambda event, key=key: self.update_config(key))
             elif key == "triggerKey":  # Dropdown for trigger key
                 dropdown_var = tk.StringVar(value=value)
                 dropdown = ttk.Combobox(self.master, textvariable=dropdown_var, values=["shift", "ctrl", "alt", "spacebar"], state="readonly")
@@ -50,19 +51,18 @@ class ConfigEditor:
                 entry.bind("<Return>", lambda event, key=key: self.update_config(key))
                 self.inputs[key] = entry_var
 
-        apply_button = ttk.Button(self.master, text="Apply", command=self.apply_changes)
-        apply_button.grid(row=len(self.config), columnspan=2, sticky="we")
-
     def update_config(self, key):
         if key in self.checkboxes:
             self.config[key] = self.checkboxes[key].get()
         elif key in self.inputs:
             self.config[key] = self.inputs[key].get()
 
+        self.program.apply_config(self.config)
+        with open("config.json", "w") as f:
+            dump(self.config, f, indent=4)
+
     def update_config_dropdown(self, key, dropdown_var):
         self.config[key] = dropdown_var.get()
-
-    def apply_changes(self):
         self.program.apply_config(self.config)
         with open("config.json", "w") as f:
             dump(self.config, f, indent=4)
