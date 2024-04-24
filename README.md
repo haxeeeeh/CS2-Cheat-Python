@@ -40,7 +40,7 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 
 ## Made by Cr0mb
-Discord: cr0mbleonthegame
+
 
 
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/b8b75a9f-dbc9-438f-8404-906f879e84d1)
