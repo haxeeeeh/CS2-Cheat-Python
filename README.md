@@ -39,8 +39,5 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 - Edit config.json to customize settings manually.
 
 
-## Made by Cr0mb
 
-
-
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/b8b75a9f-dbc9-438f-8404-906f879e84d1)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/8d473586-730b-43c1-9298-bb38518d54c6)
