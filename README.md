@@ -6,19 +6,23 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 ## Features
 ```
-    BoxEsp
-    BoxColor
-    BoxEnemyColor
-    BackgroundBox
-    DrawHealthBar
-    LineEsp
-    LineColor
-    HeadEsp
-    HeadColor
-    TeamEsp
-    Triggerbot
-    triggerbotOnSameTeam
-    triggerKey
+    "BoxEsp"
+    "DrawHealthBar"
+    "HealthEsp"
+    "NameEsp"
+    "WaterMark"
+    "LineEsp"
+    "HeadEsp"
+    "Crosshair"
+    "TeamEsp"
+    "Triggerbot"
+    "triggerbotOnSameTeam"
+    "triggerKey"
+    "BoxColor"
+    "BoxEnemyColor"
+    "BackgroundBox"
+    "LineColor"
+    "HeadColor"
 ```
 ## Usage
 1. Run GHax.py to launch the program.
@@ -39,4 +43,4 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 Discord: cr0mbleonthegame
 
 
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/a6a89dc7-ef25-49bd-9f29-a76efe09660f)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/b8b75a9f-dbc9-438f-8404-906f879e84d1)
