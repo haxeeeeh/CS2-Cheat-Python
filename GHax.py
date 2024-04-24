@@ -12,6 +12,7 @@ import pyautogui
 import requests
 import pyMeow as pw_module
 from fernet import Fernet
+import pyfiglet
 
 class ConfigEditor:
     def __init__(self, master, config, program):
@@ -40,7 +41,7 @@ class ConfigEditor:
                 dropdown.grid(row=i, column=1, sticky="we")
                 dropdown.bind("<<ComboboxSelected>>", lambda event, key=key, var=dropdown_var: self.update_config_dropdown(key, var))
                 self.inputs[key] = dropdown_var
-            elif key == "CrosshairSize":  # Remove the option to change crosshair size
+            elif key == "CrosshairSize":  
                 continue
             else:
                 entry_var = tk.StringVar(value=str(value))
@@ -55,7 +56,6 @@ class ConfigEditor:
         with open("config.json", "w") as f:
             dump(self.config, f, indent=4)
 
-
     def update_config(self, key):
         if key in self.checkboxes:
             self.config[key] = self.checkboxes[key].get()
@@ -65,7 +65,6 @@ class ConfigEditor:
         self.program.apply_config(self.config)
         with open("config.json", "w") as f:
             dump(self.config, f, indent=4)
-
 
 class Offsets:
     try:
@@ -218,30 +217,25 @@ class WallHack:
         
         watermark_text = "GHax"
         made_by_text = "Made by Cr0mb"
-        discord_text = "Discord: cr0mbleonthegame"
         
         watermark_color = pw_module.get_color("white")
         watermark_background = pw_module.get_color("black")
         
         watermark_text_width = pw_module.measure_text(watermark_text, 24)
         made_by_text_width = pw_module.measure_text(made_by_text, 12)
-        discord_text_width = pw_module.measure_text(discord_text, 12)
         
-        background_width = max(watermark_text_width, made_by_text_width, discord_text_width) + 20
-        background_height = 84
+        background_width = max(watermark_text_width, made_by_text_width) + 20
+        background_height = 64
         
         watermark_x = 10
         watermark_y = 10
         made_by_y = watermark_y + 34
-        discord_y = made_by_y + 18
         
         pw_module.draw_rectangle(watermark_x, watermark_y, background_width, background_height, watermark_background)
         
         pw_module.draw_text(watermark_text, watermark_x + 10, watermark_y + 5, 24, watermark_color)
         
         pw_module.draw_text(made_by_text, watermark_x + 10, made_by_y, 12, watermark_color)
-        
-        pw_module.draw_text(discord_text, watermark_x + 10, discord_y, 12, watermark_color)
 
     def RenderCrosshair(self):
         if not self.crosshair:
@@ -316,7 +310,6 @@ class Program:
         self.wall.healthEsp = self.config["HealthEsp"]
         self.wall.nameEsp = self.config["NameEsp"]
         self.wall.watermark = self.config["WaterMark"]
-        self.wall.crosshair = self.config["Crosshair"]
 
         self.triggerbot_enabled = self.config.get("Triggerbot", False)
         self.trigger_key = self.config.get("triggerKey", "shift")
@@ -393,6 +386,13 @@ def main():
             "WaterMark": True,
             "Crosshair": True,
         }
+    
+    # Print "GHax Client" in large text
+    print(pyfiglet.figlet_format("GHax Client"))
+
+    # Print "Made by Cr0mb" in smaller text
+    print("Made by Cr0mb")
+
     program = Program()
     editor = ConfigEditor(root, config, program)
     root.mainloop()
