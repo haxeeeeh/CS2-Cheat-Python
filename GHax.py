@@ -8,13 +8,9 @@ import keyboard
 import time
 from pynput.mouse import Controller, Button
 from win32gui import GetWindowText, GetForegroundWindow
-from random import uniform
-
-# Dynamic imports
-pw_module = __import__('py' + 'Meow')
-pymem = __import__('py' + 'mem')
-pyautogui = __import__('pyau' + 'togui')
-requests = __import__('re' + 'quests')
+import pyautogui
+import requests
+import pyMeow as pw_module
 from fernet import Fernet
 
 class ConfigEditor:
@@ -38,18 +34,27 @@ class ConfigEditor:
                 checkbox.grid(row=i, column=1, sticky="w")
                 self.checkboxes[key] = var
                 checkbox.bind("<ButtonRelease-1>", lambda event, key=key: self.update_config(key))
-            elif key == "triggerKey":  # Dropdown for trigger key
+            elif key == "triggerKey":
                 dropdown_var = tk.StringVar(value=value)
                 dropdown = ttk.Combobox(self.master, textvariable=dropdown_var, values=["shift", "ctrl", "alt", "spacebar"], state="readonly")
                 dropdown.grid(row=i, column=1, sticky="we")
                 dropdown.bind("<<ComboboxSelected>>", lambda event, key=key, var=dropdown_var: self.update_config_dropdown(key, var))
                 self.inputs[key] = dropdown_var
+            elif key == "CrosshairSize":  # Remove the option to change crosshair size
+                continue
             else:
                 entry_var = tk.StringVar(value=str(value))
                 entry = ttk.Entry(self.master, textvariable=entry_var)
                 entry.grid(row=i, column=1, sticky="we")
                 entry.bind("<Return>", lambda event, key=key: self.update_config(key))
                 self.inputs[key] = entry_var
+
+    def update_config_dropdown(self, key, dropdown_var):
+        self.config[key] = dropdown_var.get()
+        self.program.apply_config(self.config)
+        with open("config.json", "w") as f:
+            dump(self.config, f, indent=4)
+
 
     def update_config(self, key):
         if key in self.checkboxes:
@@ -61,11 +66,6 @@ class ConfigEditor:
         with open("config.json", "w") as f:
             dump(self.config, f, indent=4)
 
-    def update_config_dropdown(self, key, dropdown_var):
-        self.config[key] = dropdown_var.get()
-        self.program.apply_config(self.config)
-        with open("config.json", "w") as f:
-            dump(self.config, f, indent=4)
 
 class Offsets:
     try:
@@ -115,9 +115,9 @@ class Entity:
             return False
         
         return True
-
+        
 class WallHack:
-    def __init__(self, process, module, teamEsp=True, drawHealthBar=True, lineEsp=True, headEsp=True, boxEsp=True, boxColor="red", boxEnemyColor="blue", lineColor="white", headColor="white", backgroundColor="black"):
+    def __init__(self, process, module, teamEsp=True, drawHealthBar=True, lineEsp=True, headEsp=True, boxEsp=True, boxColor="red", boxEnemyColor="blue", lineColor="white", headColor="white", backgroundColor="black", healthEsp=True, nameEsp=True, watermark=True, crosshair=True):
         self.process = process
         self.module = module
         self.teamEsp = teamEsp
@@ -130,6 +130,10 @@ class WallHack:
         self.lineColor = lineColor
         self.headColor = headColor
         self.backgroundColor = backgroundColor
+        self.healthEsp = healthEsp
+        self.nameEsp = nameEsp
+        self.watermark = watermark
+        self.crosshair = crosshair
 
     def GetEntities(self):
         entityList = pw_module.r_int64(self.process, self.module + Offsets.dwEntityList)
@@ -168,47 +172,89 @@ class WallHack:
                 fill = pw_module.fade_color(pw_module.get_color(self.backgroundColor), 0.5)
 
                 if self.boxEsp:
-                    # Fill
                     pw_module.draw_rectangle(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, fill)
-
-                    # Box with black border
                     pw_module.draw_rectangle_lines(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, color, 1)
 
                 if self.drawHealthBar:
-                    # Health Bar
-                    health_bar_width = 5  # Width of the health bar
-                    health_bar_max_height = head  # Maximum height of the health bar, same as the box
+                    health_bar_width = 5
+                    health_bar_max_height = head
                     health_bar_color = pw_module.get_color("green") if entity.Health() > 50 else pw_module.get_color("yellow") if entity.Health() > 20 else pw_module.get_color("red")
                     
-                    # Calculate the height of the health bar based on player's health percentage
                     health_percentage = entity.Health() / 100
                     health_bar_height = health_bar_max_height * health_percentage
                     
-                    # Calculate the position of the health bar
-                    health_bar_x = entity.headPos2d["x"] - center - health_bar_width - 2  # Adjusting for spacing
-                    health_bar_y = entity.headPos2d["y"] - center / 2 + (health_bar_max_height - health_bar_height)  # Adjusting for top border
+                    health_bar_x = entity.headPos2d["x"] - center - health_bar_width - 2 
+                    health_bar_y = entity.headPos2d["y"] - center / 2 + (health_bar_max_height - health_bar_height)  
 
-                    # Draw black border around health bar (fixed position)
-                    # Calculate the position of the health bar border
-                    health_bar_border_x = health_bar_x - 1  # Adjusting for left border
-                    health_bar_border_y = entity.headPos2d["y"] - center / 2 - 1  # Adjusting for top border
+                    health_bar_border_x = health_bar_x - 1  
+                    health_bar_border_y = entity.headPos2d["y"] - center / 2 - 1  
 
                     pw_module.draw_rectangle(health_bar_border_x, health_bar_border_y, health_bar_width + 2, health_bar_max_height + 2, pw_module.get_color("black"))
 
-                    # Draw colored portion of health bar (dynamically updating)
                     pw_module.draw_rectangle(health_bar_x, health_bar_y, health_bar_width, health_bar_height, health_bar_color)
 
                 if self.lineEsp:
-                    # Draw line from bottom center of screen to player's head position
                     screen_center_x, screen_height = pyautogui.size()
                     pw_module.draw_line(screen_center_x / 2, screen_height, entity.headPos2d["x"], entity.headPos2d["y"], pw_module.get_color(self.lineColor))
 
                 if self.headEsp:
-                    # Draw a box around player's head
-                    head_size = 10  # Size of the head box
+                    head_size = 10  
                     pw_module.draw_rectangle_lines(entity.headPos2d["x"] - head_size / 2, entity.headPos2d["y"] - head_size / 2, head_size, head_size, pw_module.get_color(self.headColor), 1)
 
+                if self.healthEsp:
+                    health_text = f"Health: {entity.Health()}"
+                    pw_module.draw_text(health_text, entity.headPos2d["x"] + center + 5, entity.headPos2d["y"] - center / 2, 12, pw_module.get_color("white"))
+
+                if self.nameEsp:
+                    player_name = pw_module.r_string(self.process, entity.pointer + Offsets.m_iszPlayerName)
+                    name_width = pw_module.measure_text(player_name, 12)  
+                    pw_module.draw_text(player_name, entity.headPos2d["x"] - name_width / 2, entity.headPos2d["y"] - center - 10, 12, pw_module.get_color("white"))
+
         pw_module.end_drawing()
+
+    def RenderWatermark(self):
+        if not self.watermark:
+            return
+        
+        watermark_text = "GHax"
+        made_by_text = "Made by Cr0mb"
+        discord_text = "Discord: cr0mbleonthegame"
+        
+        watermark_color = pw_module.get_color("white")
+        watermark_background = pw_module.get_color("black")
+        
+        watermark_text_width = pw_module.measure_text(watermark_text, 24)
+        made_by_text_width = pw_module.measure_text(made_by_text, 12)
+        discord_text_width = pw_module.measure_text(discord_text, 12)
+        
+        background_width = max(watermark_text_width, made_by_text_width, discord_text_width) + 20
+        background_height = 84
+        
+        watermark_x = 10
+        watermark_y = 10
+        made_by_y = watermark_y + 34
+        discord_y = made_by_y + 18
+        
+        pw_module.draw_rectangle(watermark_x, watermark_y, background_width, background_height, watermark_background)
+        
+        pw_module.draw_text(watermark_text, watermark_x + 10, watermark_y + 5, 24, watermark_color)
+        
+        pw_module.draw_text(made_by_text, watermark_x + 10, made_by_y, 12, watermark_color)
+        
+        pw_module.draw_text(discord_text, watermark_x + 10, discord_y, 12, watermark_color)
+
+    def RenderCrosshair(self):
+        if not self.crosshair:
+            return
+        
+        crosshair_text = "+"
+        crosshair_color = pw_module.get_color("white")
+        
+        screen_center_x, screen_center_y = pyautogui.size()
+        crosshair_x = (screen_center_x - 20) / 2 + 4 # Center the crosshair horizontally
+        crosshair_y = (screen_center_y - 20) / 2  # Center the crosshair vertically
+        
+        pw_module.draw_text(crosshair_text, crosshair_x, crosshair_y, 20, crosshair_color)
 
 class Program:
     def __init__(self):
@@ -230,13 +276,16 @@ class Program:
                 boxEnemyColor=self.config["BoxEnemyColor"],
                 lineColor=self.config["LineColor"],
                 headColor=self.config["HeadColor"],
-                backgroundColor=self.config["BackgroundBox"]
-            )  # Initialize WallHack with TeamEsp option
+                backgroundColor=self.config["BackgroundBox"],
+                healthEsp=self.config["HealthEsp"],
+                nameEsp=self.config["NameEsp"],
+                watermark=self.config["WaterMark"],
+                crosshair=self.config["Crosshair"],
+            )  
 
-            # Triggerbot config
             self.triggerbot_enabled = self.config.get("Triggerbot", False)
             self.trigger_key = self.config.get("triggerKey", "shift")
-            self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)  # New triggerbot setting
+            self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)
         except:
             exit("Error: Enable only after opening Counter Strike 2")
 
@@ -244,8 +293,13 @@ class Program:
         try:
             with open("config.json", "r", encoding="utf-8") as file:
                 return load(file)
-        except:
-            exit("Error when importing configuration, see if the config.json file exists")
+        except FileNotFoundError:
+            print("Config file not found.")
+            return {}
+        except JSONDecodeError:
+            print("Error when parsing JSON data from the config file.")
+            return {}
+
 
     def apply_config(self, new_config):
         self.config = new_config
@@ -259,33 +313,37 @@ class Program:
         self.wall.lineColor = self.config["LineColor"]
         self.wall.headColor = self.config["HeadColor"]
         self.wall.backgroundColor = self.config["BackgroundBox"]
+        self.wall.healthEsp = self.config["HealthEsp"]
+        self.wall.nameEsp = self.config["NameEsp"]
+        self.wall.watermark = self.config["WaterMark"]
+        self.wall.crosshair = self.config["Crosshair"]
 
-        # Update triggerbot settings
         self.triggerbot_enabled = self.config.get("Triggerbot", False)
         self.trigger_key = self.config.get("triggerKey", "shift")
-        self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)  # New triggerbot setting
+        self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)  
 
     async def run(self):
         pw_module.overlay_init(target=self.window, title=self.window, fps=self.fps)
 
         while pw_module.overlay_loop():
             try:
-                self.config = self.load_config()  # Reload config each frame in case it's changed
+                self.config = self.load_config()  
                 self.apply_config(self.config)
 
-                if self.config["BoxEsp"] or self.config["LineEsp"] or self.config["HeadEsp"] or self.config["DrawHealthBar"]:
+                if self.config["BoxEsp"] or self.config["LineEsp"] or self.config["HeadEsp"] or self.config["DrawHealthBar"] or self.config["NameEsp"]:
                     self.wall.Render()
 
-                # Drawing watermarks
-                pw_module.draw_text("GHax", 10, 10, 14, pw_module.get_color("white"))  # Draw "GHax" at (10, 10) with font size 14 and white color
-                pw_module.draw_text("Made by Cr0mb", 10, 30, 14, pw_module.get_color("white"))  # Draw "Made by Cr0mb" at (10, 30) with font size 14 and white color
-                pw_module.draw_text("Discord: cr0mbleonthegame", 10, 50, 14, pw_module.get_color("white"))  # Draw "Discord: cr0mbleonthegame" at (10, 50) with font size 14 and white color
+                if self.config.get("WaterMark", False):
+                    self.wall.RenderWatermark()
 
-                # Triggerbot logic
+                if self.config["Crosshair"]:
+                    self.wall.RenderCrosshair()
+
                 if self.triggerbot_enabled and GetWindowText(GetForegroundWindow()) == "Counter-Strike 2" and keyboard.is_pressed(self.trigger_key):
                     self.triggerbot()
 
-            except:
+            except Exception as e:
+                print(f"Error: {e}")
                 pass
 
     def triggerbot(self):
@@ -303,17 +361,15 @@ class Program:
 
             playerTeam = pw_module.r_int(self.process, player + Offsets.m_iTeamNum)
 
-            if entityHp > 0 and (self.triggerbot_on_same_team or entityTeam != playerTeam):  # Check if triggerbot should fire based on the new setting
-                delay = 0.01  # Set a fixed delay (adjust as needed)
+            if entityHp > 0 and (self.triggerbot_on_same_team or entityTeam != playerTeam):  
+                delay = 0.01  
                 time.sleep(delay)
                 mouse = Controller()
                 mouse.click(Button.left)
 
-
-
 def main():
     root = tk.Tk()
-    root.title("Config Editor")
+    root.title("GHax")
     try:
         with open("config.json", "r") as f:
             config = load(f)
@@ -331,7 +387,11 @@ def main():
             "TeamEsp": True,
             "Triggerbot": False,
             "triggerKey": "shift",
-            "triggerbotOnSameTeam": False  # New setting added to config.json
+            "triggerbotOnSameTeam": False,  
+            "HealthEsp": True,  
+            "NameEsp": True,  
+            "WaterMark": True,
+            "Crosshair": True,
         }
     program = Program()
     editor = ConfigEditor(root, config, program)
