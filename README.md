@@ -1,4 +1,4 @@
-# CS2-Cheat-Python
+# CS2-Cheat-Python V1.4
 CS2 Configurable Wallhack &amp; Triggerbot with GUI Config Editor. Customize ESP features &amp; triggerbot settings easily. Supports dynamic config updates.
 
 This Python script provides a customizable wallhack and triggerbot for Counter-Strike 2. It includes a GUI config editor for easy customization.
