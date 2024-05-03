@@ -47,4 +47,4 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-cheat.html
 
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/8d473586-730b-43c1-9298-bb38518d54c6)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/abba419b-d79a-40b1-bd45-5d98877561b7)
