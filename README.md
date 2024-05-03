@@ -6,30 +6,30 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 ## Features
 ```
-BoxEsp
-DrawHealthBar
-LineEsp
-HeadEsp
-HealthEsp
-NameEsp
-HealthEspFontSize
-NameEspFontSize
-SkeletonEsp
-WaterMark
-Crosshair
-Triggerbot
-triggerbotOnSameTeam
-TeamEsp
-CircleBoneEsp
-CircleBoneColor
-BoxColor
-BoxEnemyColor
-BackgroundBox
-LineColor
-HeadColor
-HeadShape
-SkeletonColor
-triggerKey
+> BoxEsp
+> DrawHealthBar
+> LineEsp
+> HeadEsp
+> HealthEsp
+> NameEsp
+> HealthEspFontSize
+> NameEspFontSize
+> SkeletonEsp
+> WaterMark
+> Crosshair
+> Triggerbot
+> triggerbotOnSameTeam
+> TeamEsp
+> CircleBoneEsp
+> CircleBoneColor
+> BoxColor
+> BoxEnemyColor
+> BackgroundBox
+> LineColor
+> HeadColor
+> HeadShape
+> SkeletonColor
+> triggerKey
 ```
 ## Usage
 1. Run GHax.py to launch the program.
