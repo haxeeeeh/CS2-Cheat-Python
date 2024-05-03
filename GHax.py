@@ -85,11 +85,19 @@ class ConfigEditor:
 
 class Offsets:
     try:
-        with open("offsets.json", "r") as f:
-            offset_data = json.load(f)
+        # Fetch offsets.json and client.dll.cs from online
+        offsets_url = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json"
+        client_dll_url = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client.dll.cs"
+        
+        offsets_response = requests.get(offsets_url)
+        client_dll_response = requests.get(client_dll_url)
+        
+        # Check if the requests were successful
+        if offsets_response.status_code != 200 or client_dll_response.status_code != 200:
+            raise Exception("Failed to fetch data from online sources.")
 
-        with open("client.dll.cs", "r") as f:
-            client_data = f.read()
+        offset_data = offsets_response.json()
+        client_data = client_dll_response.text
 
         # Verify if client.dll data is available
         if "client.dll" not in offset_data or "client.dll" not in client_data:
