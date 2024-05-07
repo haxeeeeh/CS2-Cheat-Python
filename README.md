@@ -1,5 +1,3 @@
-// currently broken in online mode, update coming soon. //
-
 # CS2-Cheat-Python V1.5 Update
 ```
 # + update added +
