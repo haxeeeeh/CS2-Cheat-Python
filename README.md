@@ -48,7 +48,6 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 ## Features
 ```
-{
 > watermark
 > boxesp
 > healthbar
@@ -77,10 +76,6 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 > namesize
 > healthsize
 > triggerKey
-}
-
-
-
 ```
 ## Usage
 1. Run GHax.py to launch the program.
