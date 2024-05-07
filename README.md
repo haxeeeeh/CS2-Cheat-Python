@@ -6,14 +6,14 @@
 V1.5
 <!> UPDATED FEATURES<!> 5/7/2024
 
-# > squarebone esp
-# > updated crosshair
-# > updated teamesp to enemyonly
-# > no longer renders wallhack on local player.
-# > fixed major error Error: 299 - Only part of a ReadProcessMemory or WriteProcessMemory request has been performed
-# > added name & health text color
-# > added updates to json reading to remove bugs when making updates to config.json
-# > removed tkinter gui window (for now)
++ squarebone esp
++ updated crosshair
++ updated teamesp to enemyonly
++ no longer renders wallhack on local player.
++ fixed major error Error: 299 - Only part of a ReadProcessMemory or WriteProcessMemory request has been performed
++ added name & health text color
++ added updates to json reading to remove bugs when making updates to config.json
++ removed tkinter gui window (for now)
 ```
 
 ```
