@@ -3,7 +3,8 @@
 
 # CS2-Cheat-Python V1.5 Update
 ```
-# + update added +
+V1.5
+<!> UPDATED FEATURES<!> 5/7/2024
 
 # > squarebone esp
 # > updated crosshair
