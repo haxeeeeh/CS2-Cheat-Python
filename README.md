@@ -97,4 +97,4 @@ https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-c
 
 https://cheater.fun/cs2-hacks/8939-simple-cs2-free-python-cheat-esp-triggerbot.html
 
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/abba419b-d79a-40b1-bd45-5d98877561b7)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/ddc17bb0-0903-40af-bdde-3d3a06195a43)
