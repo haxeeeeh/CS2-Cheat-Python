@@ -86,7 +86,7 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 ## Requirements
 ```
 > Python 3.x
-> tkinter, json, asyncio, os, importlib, multiprocessing, pymem, pynput, pyautogui, requests
+> requests keyboard pynput pywin32
 ```
 
 ## Configuration
