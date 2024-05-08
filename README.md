@@ -4,7 +4,7 @@
 # CS2-Cheat-Python V1.6 Update
 ```
 V1.6
-<!> UPDATED FEATURES<!> 5/7/2024
+<!> UPDATED FEATURES<!> 5/8/2024
 
 + Fixed the "wallhack" feature to be able to enable/disable the bounding box as well as all ESP features.
    >  To disable all ESP features you can either set all to false and leave wallhack to true, or set wallhack to false and restart the script.
