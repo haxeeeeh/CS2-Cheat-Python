@@ -1,14 +1,3 @@
-# + update added +
-
-# > squarebone esp
-# > updated crosshair
-# > updated teamesp to enemyonly
-# > no longer renders wallhack on local player.
-# > fixed major error Error: 299 - Only part of a ReadProcessMemory or WriteProcessMemory request has been performed
-# > added name & health text color
-# > added updates to json reading to remove bugs when making updates to config.json
-# > removed tkinter gui window (for now)
-
 import pyMeow as pw_module
 from json import load
 from requests import get
@@ -210,7 +199,6 @@ class WallHack:
 
     def Render(self):
         matrix = pw_module.r_floats(self.process, self.module + Offsets.dwViewMatrix, 16)
-        boxbackground = self.config.get("boxbackground", "black")  # Fetching box background color from config
         
         for entity in self.GetEntities():
             if entity.Wts(matrix) and entity.Health() > 0:
@@ -218,13 +206,18 @@ class WallHack:
                 width = head / 2
                 center = width / 2
                 color = pw_module.get_color(self.config.get("enemycolor", "red")) if entity.Team() == 2 else pw_module.get_color(self.config.get("teamcolor", "blue"))
-                fill = pw_module.fade_color(pw_module.get_color(boxbackground), 0.5)  # Applying box background color with opacity
-
-                # Fill
-                pw_module.draw_rectangle(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, fill)
-
-                # Box
-                pw_module.draw_rectangle_lines(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, color, 0.8)
+                
+                # Fetching box background color from config
+                boxbackground = self.config.get("boxbackground", "black")
+                
+                # Check if bounding box rendering is enabled
+                if self.config.get("boundingbox", False):
+                    # Draw filled rectangle with box background color
+                    fill = pw_module.fade_color(pw_module.get_color(boxbackground), 0.5)
+                    pw_module.draw_rectangle(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, fill)
+                    
+                    # Draw bounding box lines only if boundingbox is True
+                    pw_module.draw_rectangle_lines(entity.headPos2d["x"] - center, entity.headPos2d["y"] - center / 2, width, head + center / 2, color, 0.8)
 
                 # Head ESP
                 if self.config.get("headesp", False):
@@ -364,7 +357,7 @@ class Program:
                     self.trigger_key = self.config.get("triggerKey", "shift")
                     self.triggerbot_on_same_team = self.config.get("triggerbotOnSameTeam", False)
 
-                if self.config.get("boxesp", False):
+                if self.config.get("wallhack", False):
                     self.wall.Render()
 
                 # Triggerbot functionality
