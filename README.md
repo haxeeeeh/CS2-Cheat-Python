@@ -1,7 +1,17 @@
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/dc5bab01-d02a-488b-adec-d2d292710d81)
 
 
-# CS2-Cheat-Python V1.5 Update
+# CS2-Cheat-Python V1.6 Update
+```
+V1.6
+<!> UPDATED FEATURES<!> 5/7/2024
+
++ Fixed the "wallhack" feature to be able to enable/disable the bounding box as well as all ESP features.
+   >  To disable all ESP features you can either set all to false and leave wallhack to true, or set wallhack to false and restart the script.
+   >  Setting wallhack to false with the script initialized will make it crash. If wallhack is set to false and the script is initialized, the wallhack can still be set to true.
++ added option for "boundingbox", if enabled, you will see the bounding box as well as the background opacity. if disabled both features are turned off.
+	  
+```
 ```
 V1.5
 <!> UPDATED FEATURES<!> 5/7/2024
