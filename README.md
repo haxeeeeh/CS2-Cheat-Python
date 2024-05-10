@@ -8,9 +8,9 @@ V1.7
 <!> UPDATED FEATURES <!> 5/10/2024
 
 + Temporarily removed Triggerbot
-+ Temporarily removed Watermark
 + Temporarily removed config file
 + Removed any bugs with disabling all ESP features
++ ESP much smoother
 + Added menu using pyqt5
 + python script can now be built into an executable with pyinstaller
 ```
