@@ -1,6 +1,6 @@
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/0822c611-130f-456f-a948-f5326ec1d8a3)
 
-# CS2-Cheat-Python V1.6 Update
+# CS2-Cheat-Python V1.7 Update
 ```
 V1.7
 
