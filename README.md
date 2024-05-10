@@ -1,5 +1,4 @@
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/dc5bab01-d02a-488b-adec-d2d292710d81)
-
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/0822c611-130f-456f-a948-f5326ec1d8a3)
 
 # CS2-Cheat-Python V1.6 Update
 ```
@@ -12,6 +11,7 @@ V1.7
 + Removed any bugs with disabling all ESP features
 + ESP much smoother
 + Added menu using pyqt5
++ Easily Accessible Menu Options
 + python script can now be built into an executable with pyinstaller
 ```
 ```
@@ -118,4 +118,4 @@ https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-c
 
 https://cheater.fun/cs2-hacks/8939-simple-cs2-free-python-cheat-esp-triggerbot.html
 
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/ddc17bb0-0903-40af-bdde-3d3a06195a43)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/dc5bab01-d02a-488b-adec-d2d292710d81)
