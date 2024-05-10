@@ -3,6 +3,18 @@
 
 # CS2-Cheat-Python V1.6 Update
 ```
+V1.7
+
+<!> UPDATED FEATURES <!> 5/10/2024
+
++ Temporarily removed Triggerbot
++ Temporarily removed Watermark
++ Temporarily removed config file
++ Removed any bugs with disabling all ESP features
++ Added menu using pyqt5
++ python script can now be built into an executable with pyinstaller
+```
+```
 V1.6
 <!> UPDATED FEATURES<!> 5/8/2024
 
