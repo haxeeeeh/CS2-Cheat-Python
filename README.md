@@ -14,6 +14,16 @@ V1.7
 + Easily Accessible Menu Options
 + python script can now be built into an executable with pyinstaller
 ```
+
+
+## How To compile into executable
+1. install pyinstaller (pip install pyinstaller)
+2. run this command in the same directory as python script
+```
+pyinstaller --onefile GHax.py
+```
+
+
 ```
 V1.6
 <!> UPDATED FEATURES<!> 5/8/2024
