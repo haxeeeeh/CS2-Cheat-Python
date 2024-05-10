@@ -493,6 +493,8 @@ class Program:
             """)
             checkbox.stateChanged.connect(function)
             checkboxes_layout.addWidget(checkbox)
+            if text == "Watermark":  # Added to set initial state of watermark checkbox
+                checkbox.setChecked(self.wall.watermark_enabled)
 
         buttons_layout = QVBoxLayout()  # Layout for buttons
         buttons = [
@@ -527,9 +529,9 @@ class Program:
             """)
             button.clicked.connect(function)
             buttons_layout.addWidget(button)
-            
-            
-            
+
+
+
         # Checkbox to toggle crosshair
         crosshair_checkbox = QCheckBox("Crosshair")
         crosshair_checkbox.setStyleSheet("""
@@ -574,6 +576,7 @@ class Program:
 
         self.window.setLayout(layout)
         self.window.show()
+
 
 
 
