@@ -10,6 +10,7 @@ V1.8
 + Added TriggerKey
 + Added TriggerTeam
 + Added keyboard listener for triggerkey with winsound
++ Temporarily removed config.json
 ```
 
 
@@ -129,8 +130,7 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 > requests keyboard pynput pywin32
 ```
 
-## Configuration
-- Edit config.json to customize settings manually.
+## Commercial
 
 https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-cheat.html
 
