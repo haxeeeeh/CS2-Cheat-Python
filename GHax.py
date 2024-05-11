@@ -530,7 +530,7 @@ class Program:
 
     def create_gui(self):
         self.window = QWidget()
-        self.window.setWindowTitle("GHax V1.7")
+        self.window.setWindowTitle("GHax V1.8")
         self.window.setStyleSheet("background-color: #23272A;")
         self.window.setGeometry(100, 100, 400, 400)
 
