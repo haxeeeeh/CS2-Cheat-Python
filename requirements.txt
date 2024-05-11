@@ -1,0 +1,4 @@
+requests
+PyQt5
+pymem
+pyMeow
