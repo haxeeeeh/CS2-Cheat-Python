@@ -22,7 +22,7 @@ pyinstaller --onefile GHax.py
 
 ### logs:
 ```
-V1.8
+V1.7
 
 <!> UPDATED FEATURES <!> 5/10/2024
 
