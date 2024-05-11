@@ -1,18 +1,15 @@
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/0822c611-130f-456f-a948-f5326ec1d8a3)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/ff498290-aa7c-4056-afd6-bfd538c32dcf)
 
 # CS2-Cheat-Python V1.7 Update
 ```
-V1.7
+V1.8
 
-<!> UPDATED FEATURES <!> 5/10/2024
+<!> UPDATED FEATURES <!> 5/11/2024
 
-+ Temporarily removed Triggerbot
-+ Temporarily removed config file
-+ Removed any bugs with disabling all ESP features
-+ ESP much smoother
-+ Added menu using pyqt5
-+ Easily Accessible Menu Options
-+ python script can now be built into an executable with pyinstaller
++ Added TriggerBot
++ Added TriggerKey
++ Added TriggerTeam
++ Added keyboard listener for triggerkey with winsound
 ```
 
 
@@ -24,6 +21,19 @@ pyinstaller --onefile GHax.py
 ```
 
 ### logs:
+```
+V1.8
+
+<!> UPDATED FEATURES <!> 5/10/2024
+
++ Temporarily removed Triggerbot
++ Temporarily removed config file
++ Removed any bugs with disabling all ESP features
++ ESP much smoother
++ Added menu using pyqt5
++ Easily Accessible Menu Options
++ python script can now be built into an executable with pyinstaller
+```
 ```
 V1.6
 <!> UPDATED FEATURES<!> 5/8/2024
