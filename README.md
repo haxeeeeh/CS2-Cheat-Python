@@ -1,4 +1,4 @@
-![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/ff498290-aa7c-4056-afd6-bfd538c32dcf)
+![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/b67ee970-31f1-41ca-8c99-aed1131bc3b2)
 
 # CS2-Cheat-Python V1.8 Update
 ```
