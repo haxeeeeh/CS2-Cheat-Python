@@ -130,10 +130,16 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 > requests keyboard pynput pywin32
 ```
 
-## Commercial
+## Commercial // Forums that I have posted or has posted my source code.
 
-https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-cheat.html
+[UnknownCheats.me](https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-cheat.html)
 
-https://cheater.fun/cs2-hacks/8939-simple-cs2-free-python-cheat-esp-triggerbot.html
+[Cheater.fun](https://cheater.fun/cs2-hacks/8939-simple-cs2-free-python-cheat-esp-triggerbot.html)
+
+[Hells-hack.com](https://hells-hack.com/cheats-for-cs2/12399-chit-dlja-cs2-python-besplatno-esp-wh-triggerbot.html)
+
+[CSHacked.pl](https://www.cshacked.pl/ghax-cs2-python-esp-triggerbot-t185330)
+
+[27cat.com](https://www.27cat.com/thread-16812-1-1.html)
 
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/dc5bab01-d02a-488b-adec-d2d292710d81)
