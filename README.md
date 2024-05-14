@@ -1,6 +1,7 @@
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/b67ee970-31f1-41ca-8c99-aed1131bc3b2)
 
 // I will not help you with any issues if this does not work for you, find the answer on your own. //
+
 // If you make adjustments or improvements, please contact me so I can study your updates; everybody learns. //
 
 # CS2-Cheat-Python V1.8 Update
