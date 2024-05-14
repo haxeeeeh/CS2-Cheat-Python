@@ -2,7 +2,7 @@
 
 // I will not help you with any issues if this does not work for you, find the answer on your own. //
 
-// If you make adjustments or improvements, please contact me so I can study your updates; everybody learns. //
+// If you make adjustments or improvements that are of good quality, I will add and give you credit. //
 
 # CS2-Cheat-Python V1.8 Update
 ```
