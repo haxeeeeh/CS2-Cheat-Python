@@ -148,4 +148,5 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 
 [Video Showcase V1.7 Youtube](https://youtu.be/9teZ47ju0vU?si=qoiyQzW089wJiUcg)
+
 ![image](https://github.com/Cr0mb/CS2-Cheat-Python/assets/137664526/dc5bab01-d02a-488b-adec-d2d292710d81)
