@@ -146,6 +146,14 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 
 [27cat.com](https://www.27cat.com/thread-16812-1-1.html)
 
+[CheaterDawn.com](https://cheaterdawn.com/cs2-python-cheat-triggerbot-esp)
+
+[CheatGlobal.com](https://cheatglobal.com/konu/cs2-python-esp-triggerbot.51691)
+
+[GGDT.ru](https://f.ggdt.ru/threads/17672/)
+
+[ToolFun.Net](https://toolfun.net/ghax-cs2-python-cheat/)
+
 
 [Video Showcase V1.7 Youtube](https://youtu.be/9teZ47ju0vU?si=qoiyQzW089wJiUcg)
 
