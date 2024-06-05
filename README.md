@@ -134,6 +134,9 @@ This Python script provides a customizable wallhack and triggerbot for Counter-S
 > requests keyboard pynput pywin32
 ```
 
+## Warning
+Using cheats in online games like Counter Strike 2 can result in a vac ban. I am not responsible for any issues you may come across, use at your own risk.
+
 ## Commercial // Forums that I have posted or has posted my source code.
 
 [UnknownCheats.me](https://www.unknowncheats.me/forum/counter-strike-2-releases/633657-cs2-python-cheat.html)
